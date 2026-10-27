@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>주소가 바뀌었어요</title>
+<style>
+  :root{
+    --bg:#fbf7f2; --card:#ffffff; --text-0:#1c1917; --text-2:#57534e; --text-3:#a8a29e;
+    --line:#ece5dc; --accent:#ea580c; --accent-2:#c2410c; --code:#f5efe7;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#141210; --card:#1d1a17; --text-0:#f5f5f4; --text-2:#c7c2bc; --text-3:#78716c;
+      --line:#2e2925; --accent:#fb923c; --accent-2:#fdba74; --code:#26221e;
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg);color:var(--text-0);
+    font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    display:flex;align-items:center;justify-content:center;padding:24px 16px;
+  }
+  .card{
+    width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:32px 28px 28px;text-align:center;
+    box-shadow:0 10px 30px rgba(28,25,23,.06);
+  }
+  .brand{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--text-3);text-transform:uppercase}
+  h1{margin:14px 0 8px;font-size:22px;letter-spacing:-.02em}
+  p{margin:0;color:var(--text-2);font-size:14.5px;line-height:1.6}
+  .urls{margin:20px 0 22px;display:grid;gap:8px;text-align:left}
+  .url{display:flex;align-items:center;gap:10px;background:var(--code);border-radius:10px;padding:10px 12px;font-size:13px;overflow:hidden}
+  .url b{flex:none;font-size:11.5px;color:var(--text-3);font-weight:700;width:34px}
+  .url span{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .url.old span{color:var(--text-3);text-decoration:line-through}
+  .url.new span{color:var(--accent-2);font-weight:600}
+  .go{
+    display:block;width:100%;padding:14px 16px;border:0;border-radius:12px;
+    background:var(--accent);color:#fff;font-size:16px;font-weight:700;letter-spacing:-.01em;
+    text-decoration:none;cursor:pointer;transition:filter .15s,transform .05s;
+  }
+  .go:hover{filter:brightness(1.07)}
+  .go:active{transform:translateY(1px)}
+  .hint{margin-top:14px;font-size:12.5px;color:var(--text-3)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+  <main class="card" id="moved" hidden>
+    <div class="brand">Bead Universe Office</div>
+    <h1>오피스 주소가 바뀌었어요</h1>
+    <p>브라이트비드 오피스가 새 주소로 이사했어요.<br>아래 버튼을 눌러 이동해 주세요.</p>
+    <div class="urls">
+      <div class="url old"><b>이전</b><span id="oldUrl"></span></div>
+      <div class="url new"><b>새 주소</b><span id="newUrl"></span></div>
+    </div>
+    <a class="go" id="goBtn" href="/beaduniverse/">새 주소로 이동하기 →</a>
+    <div class="hint">북마크·홈 화면 바로가기도 새 주소로 바꿔 주세요.</div>
+  </main>
+
+  <main class="card" id="notFound" hidden>
+    <div class="brand">j65209.github.io</div>
+    <h1>페이지를 찾을 수 없어요</h1>
+    <p>주소가 정확한지 확인해 주세요.</p>
+  </main>
+
+<script>
+  // 옛 오피스 주소(/Brightbeed/...)로 들어오면 같은 경로·쿼리·해시를 새 레포(/beaduniverse/...)로 이어준다.
+  // GitHub Pages 는 레포 이름 변경 시 옛 주소를 리다이렉트하지 않아서, 사용자 사이트의 404 페이지가 대신 안내한다.
+  (function(){
+    var OLD = /^\/brightbeed(\/|$)/i, NEW_BASE = '/beaduniverse/';
+    var path = location.pathname;
+    if(!OLD.test(path)){ document.getElementById('notFound').hidden = false; return; }
+    var rest = path.replace(OLD, '');
+    var target = NEW_BASE + rest + location.search + location.hash;
+    document.getElementById('goBtn').href = target;
+    document.getElementById('oldUrl').textContent = location.host + path + location.search + location.hash;
+    document.getElementById('newUrl').textContent = location.host + target;
+    document.title = '주소가 바뀌었어요 · Bead Universe Office';
+    document.getElementById('moved').hidden = false;
+  })();
+</script>
+</body>
+</html>
